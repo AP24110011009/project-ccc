@@ -1,0 +1,61 @@
+#include <stdio.h>
+
+int main() {
+    char items[5][20] = {"Rice", "Sugar", "Oil", "Soap", "Tea"};
+    float price[5] = {60, 45, 120, 30, 150};
+    int stock[5] = {50, 40, 30, 60, 25};
+
+    int billQty[5] = {0};
+    float billAmt[5] = {0};
+
+    int choice, qty;
+    float total = 0;
+
+    while (1) {
+        printf("\n--- GROCERY ITEMS ---\n");
+        printf("No.\tItem\tPrice\tStock\n");
+        for (int i = 0; i < 5; i++) {
+            printf("%d\t%s\t%.2f\t%d\n", i + 1, items[i], price[i], stock[i]);
+        }
+
+        printf("\nEnter item number to buy (1-5), 0 to finish: ");
+        scanf("%d", &choice);
+
+        if (choice == 0)
+            break;
+
+        if (choice < 1 || choice > 5) {
+            printf("Invalid item number.\n");
+            continue;
+        }
+
+        printf("Enter quantity: ");
+        scanf("%d", &qty);
+
+        int index = choice - 1;
+
+        if (qty > stock[index]) {
+            printf("Not enough stock! Available: %d\n", stock[index]);
+        } else {
+            stock[index] -= qty;
+            billQty[index] += qty;
+            billAmt[index] = billQty[index] * price[index];
+            printf("Added to bill!\n");
+        }
+    }
+
+    printf("\n--- FINAL BILL ---\n");
+    printf("Item\tQty\tPrice\tAmount\n");
+    for (int i = 0; i < 5; i++) {
+        if (billQty[i] > 0) {
+            printf("%s\t%d\t%.2f\t%.2f\n",
+                   items[i], billQty[i], price[i], billAmt[i]);
+            total += billAmt[i];
+        }
+    }
+
+    printf("--------------------------\n");
+    printf("Total Amount: %.2f\n", total);
+
+    return 0;
+}
